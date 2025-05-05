@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #div2 {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="div1">
+        <input id="todo" type="text">
+        <input id="content" type="text">
+        <button onclick="addTodo()">add </button>
+    </div>
+
+
+    <div id="div2">
+        <input id="edittodo" type="text">
+        <input id="editcontent" type="text">
+        <button onclick="editTodo()"> edit </button>
+    </div>
+
+
+    <div id="preview">
+
+    </div>
+
+</body>
+
+</html>
+<script>
+    // let myTodo = document.querySelector('#todo')
+    // let myContent = document.querySelector('#content')
+    // let previewDiv = document.querySelector("#preview")
+
+    let todoDatabase = []
+
+    function addTodo() {
+        let theTodo = todo.value.trim()
+        let theContent = content.value.trim()
+
+        let obj = {
+            todo: theTodo,
+            content: theContent
+        }
+
+        todoDatabase.push(obj)
+
+
+        console.log(todoDatabase);
+
+
+
+        preview.innerHTML = ''
+        for (let index = 0; index < todoDatabase.length; index++) {
+            preview.innerHTML += ` <p>${todoDatabase[index].todo}  ${todoDatabase[index].content} <button onclick="tellMeTheIndex(${index})" > edit </button> <button> delete </button> </p>  
+        `
+
+        }
+
+
+    }
+
+    function tellMeTheIndex(i) {
+        console.log(i);
+        div1.style.display = 'none'
+        div2.style.display = 'block'
+        edittodo.value = todoDatabase[i].todo
+        editcontent.value = todoDatabase[i].content
+    }
+
+
+
+
+
+
+    // let aprilCohort = {
+    //     studentNo: 20,
+    //     amountOfBoys: 5,
+    //     amountOfGirls: 15
+    // }
+
+
+
+</script>
