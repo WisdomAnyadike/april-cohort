@@ -35,56 +35,66 @@
 
 </html>
 <script>
-    // let myTodo = document.querySelector('#todo')
-    // let myContent = document.querySelector('#content')
-    // let previewDiv = document.querySelector("#preview")
+
 
     let todoDatabase = []
+    let myIndex
+
 
     function addTodo() {
         let theTodo = todo.value.trim()
         let theContent = content.value.trim()
-
         let obj = {
             todo: theTodo,
             content: theContent
         }
-
         todoDatabase.push(obj)
-
-
+        todo.value = ''
+        content.value = ''
         console.log(todoDatabase);
-
-
-
-        preview.innerHTML = ''
-        for (let index = 0; index < todoDatabase.length; index++) {
-            preview.innerHTML += ` <p>${todoDatabase[index].todo}  ${todoDatabase[index].content} <button onclick="tellMeTheIndex(${index})" > edit </button> <button> delete </button> </p>  
-        `
-
-        }
-
+        display()
 
     }
 
     function tellMeTheIndex(i) {
+        myIndex = i
         console.log(i);
-        div1.style.display = 'none'
-        div2.style.display = 'block'
+        displayDiv('none', "block")
         edittodo.value = todoDatabase[i].todo
         editcontent.value = todoDatabase[i].content
     }
 
 
+    function editTodo() {
+        let obj = {
+            todo: edittodo.value,
+            content: editcontent.value
+        }
+        displayDiv("block", "none")
+        todoDatabase.splice(myIndex, 1, obj)
+        console.log(todoDatabase);
+        display()
+    }
 
 
+    function display(params) {
+        preview.innerHTML = ''
+        for (let index = 0; index < todoDatabase.length; index++) {
+            preview.innerHTML += ` <p>${todoDatabase[index].todo}  ${todoDatabase[index].content} <button onclick="tellMeTheIndex(${index})" > edit </button> <button > delete </button> </p>  
+        `
+
+        }
+    }
+
+    function displayDiv(val1, val2) {
+        div1.style.display = val1
+        div2.style.display = val2
+    }
 
 
-    // let aprilCohort = {
-    //     studentNo: 20,
-    //     amountOfBoys: 5,
-    //     amountOfGirls: 15
-    // }
+    let arr = [1, 2, 3]
+    arr.splice(0, 1, 67)
+
 
 
 
