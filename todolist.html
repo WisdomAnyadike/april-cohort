@@ -35,14 +35,15 @@
 
 </html>
 <script>
+  
 
-
-    let todoDatabase = []
+    var todoDatabase = []
     let myIndex
 
 
     function addTodo() {
-        let theTodo = todo.value.trim()
+        console.log(theTodo);
+        var theTodo = todo.value.trim()
         let theContent = content.value.trim()
         let obj = {
             todo: theTodo,
@@ -53,8 +54,11 @@
         content.value = ''
         console.log(todoDatabase);
         display()
+      
 
     }
+
+ 
 
     function tellMeTheIndex(i) {
         myIndex = i
@@ -80,7 +84,7 @@
     function display(params) {
         preview.innerHTML = ''
         for (let index = 0; index < todoDatabase.length; index++) {
-            preview.innerHTML += ` <p>${todoDatabase[index].todo}  ${todoDatabase[index].content} <button onclick="tellMeTheIndex(${index})" > edit </button> <button > delete </button> </p>  
+            preview.innerHTML += ` <p>${todoDatabase[index].todo}  ${todoDatabase[index].content} <button onclick="tellMeTheIndex(${index})" > edit </button> <button onclick="deleteTodo(${index})" > delete </button> </p>  
         `
 
         }
@@ -92,10 +96,25 @@
     }
 
 
-    let arr = [1, 2, 3]
-    arr.splice(0, 1, 67)
+    function deleteTodo(i) {
+        todoDatabase.splice(i, 1)
+        display()
+    }
+
+    var wow = function () {
+        console.log("i love to eat bread ");
+    }
 
 
+    wow()
+
+    console.log(school);
+
+    if (condition) {
+        let school = 'sqi'
+    }
+
+    console.log(school);
 
 
 </script>

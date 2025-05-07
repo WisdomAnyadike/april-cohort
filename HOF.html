@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+
+</html>
+<script>
+    // foreach , map , find , findIndex , every , some , reduce , filter
+
+    let arr = ['1', 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    arr.includes(67)
+
+    let myForEach = arr.forEach((num, index, y) => {
+
+        console.log(y, num, index);
+        return 89
+    })
+
+    console.log(myForEach);
+
+    let myMap = arr.map((num, index, y) => {
+
+        console.log(y, num, index);
+        if (num % 2 === 0) {
+            return num
+        }
+
+        return ""
+
+    })
+    myMap = myMap.join().replaceAll(',,', ',').split(',')
+    myMap.shift()
+    console.log(myMap);
+
+
+
+    // for (const w of arr) {
+    //     console.log(w);
+
+    // }
+
+    // function mr(e, w, s) {
+
+    //     return
+    // }
+
+    // console.log(mr(2, 5, 7));
+
+    let foundNum = arr.find((num, i, array) => {
+        console.log(num, i, array);
+        return typeof num === "object"
+    })
+
+    console.log(foundNum);
+
+
+
+</script>
