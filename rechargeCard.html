@@ -56,8 +56,9 @@
 
     <div>
 
-        <!-- <button onclick="display(rechargeCards)"> all cards </button> <button onclick="displayUsed()"> used cards
-        </button> <button onclick="displayUnUsed()"> un-used cards </button> -->
+        <button onclick="display(cardDatabase)"> all cards </button> <button onclick="displayTheCards(true) "> used
+            cards
+        </button> <button onclick="displayTheCards(false) "> un-used cards </button>
 
         <table>
             <thead>
@@ -69,6 +70,7 @@
 
             </thead>
             <tbody id="tbody">
+
 
             </tbody>
         </table>
@@ -87,7 +89,92 @@
 
 </html>
 <script>
+    // let num = 1
+    let cardDatabase = []
 
-    let provider = document.getElementById('Provider')
-    console.log(provider.value);
+    function generatePin() {
+        if (Provider.value === '' || Amount.value === '') {
+            alert('all fields are mandatory')
+        } else {
+
+            let pin = ''
+            for (let index = 0; index < 12; index++) {
+                let numPicker = Math.floor(Math.random() * 10) // 0 - 9
+                pin = pin + numPicker
+
+            }
+
+            mypin.innerHTML = pin
+            let pinObj = {
+                // number: num++,
+                provider: Provider.value,
+                amount: Amount.value,
+                cardPin: pin,
+                isUsed: false
+            }
+            cardDatabase.push(pinObj)
+            display(cardDatabase)
+
+            console.log(cardDatabase);
+
+
+        }
+
+    }
+
+
+    function display(params) {
+        if (params.length === 0) {
+            tbody.innerHTML = '<tr>no data </tr>'
+            return
+        }
+        tbody.innerHTML = ''
+        params.forEach((card, i) => {
+            tbody.innerHTML += `   <tr>
+                    <td> ${i + 1} </td>
+                    <td> ${card.provider}</td>
+                    <td> ${card.amount}</td>
+                    <td> ${card.cardPin}</td>
+                    <td> ${card.isUsed}</td>
+
+                </tr>`
+        });
+    }
+    display(cardDatabase)
+
+    //!cardValue.startsWith("*311*") || !cardValue.endWith('#') || cardValue.length !== 18
+
+    function loadCard() {
+        let cardValue = myCode.value.trim()
+        let cardToBeRecharged = cardDatabase.find((card) => card.cardPin === myCode.value.trim().slice(5, 17))
+        if (!myCode.value.trim()) {
+            alert('please input a value')
+        } else if (!cardToBeRecharged) {
+            alert('pin does not exist')
+        } else if (cardValue !== `*311*${cardToBeRecharged.cardPin}#`) {
+            alert('invalid format')
+        } else if (cardToBeRecharged.isUsed) {
+            alert('this card has been used')
+        } else {
+            cardToBeRecharged.isUsed = true
+            alert(`recharge successful, you just recharged ${cardToBeRecharged.provider} of ${cardToBeRecharged.amount}`)
+            display(cardDatabase)
+        }
+
+    }
+
+
+    function displayTheCards(params) {
+        let cardsToBeDisplayed = cardDatabase.filter((card) => card.isUsed === params)
+        display(cardsToBeDisplayed)
+    }
+
+
+    // localStorage.getItem()
+    // localStorage.setItem()
+    // localStorage.clear()
+    // localStorage.removeItem()
+
+
+
 </script>

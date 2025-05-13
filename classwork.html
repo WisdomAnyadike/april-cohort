@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="text" id="input"> <button onclick="runSearch()"> click </button>
+
+</body>
+
+</html>
+<script>
+    let products = ['rice', 'bean']
+
+    function runSearch() {
+        let indexOfProduct = products.findIndex((product) => {
+            return product === input.value.trim()
+        })
+        if (indexOfProduct !== -1) {
+            alert('valid product')
+        } else {
+            alert('invalid product')
+        }
+
+    }
+
+
+    let isEveryProdsLengthGreaterThan4 = products.every((product, i, array) => {
+        return product.length > 4
+
+    })
+
+    console.log(isEveryProdsLengthGreaterThan4);
+
+
+    let isAtLeastOneProdsLengthGreaterThan4 = products.some((product, i, array) => {
+
+        return product.length > 4
+
+    })
+
+    let classMembers = [
+        {
+            name: 'patrick',
+            gender: "male"
+        },
+        {
+            name: 'joshua',
+            gender: "male"
+        },
+        {
+            name: 'mary',
+            gender: "female"
+        },
+        {
+            name: 'samuel',
+            gender: "male"
+        },
+        {
+            name: 'ridwan',
+            gender: "male"
+        },
+        {
+            name: 'great',
+            gender: "male"
+        }
+    ]
+
+    let onlyFemaleMembers = classMembers.filter((member, i, arr) => {
+
+        return member.gender === "female"
+    })
+
+
+    console.log(onlyFemaleMembers);
+
+
+    let arr = ["i ", "am ", "a ", "boy."]
+
+    let sum = ''
+    for (let index = 0; index < arr.length; index++) {
+        sum = sum + arr[index]
+    }
+
+    console.log(sum);
+
+    let sumOfArr = arr.reduce((A, C) => { return A + C }, '')
+    console.log(sumOfArr);
+
+
+
+
+</script>
