@@ -41,7 +41,7 @@
     <br>
     <br>
 
-    <button onclick="generatePin()">Generate Pin</button>
+    <button id="genPin" onclick="generatePin()">Generate Pin</button>
     <br>
     <p id="mypin"> </p>
 
@@ -89,36 +89,46 @@
 
 </html>
 <script>
+
+
+    // let value = '' ? 23 : 67
+    // console.log(value);
+
+
     // let num = 1
-    let cardDatabase = []
+    let cardDatabase = JSON.parse(localStorage.getItem('cardsData')) || []
 
     function generatePin() {
-        if (Provider.value === '' || Amount.value === '') {
-            alert('all fields are mandatory')
-        } else {
+        genPin.innerHTML = 'loading...'
+        genPin.disabled = true
+        setTimeout(() => {
+            if (Provider.value === '' || Amount.value === '') {
+                alert('all fields are mandatory')
+            } else {
 
-            let pin = ''
-            for (let index = 0; index < 12; index++) {
-                let numPicker = Math.floor(Math.random() * 10) // 0 - 9
-                pin = pin + numPicker
+                let pin = ''
+                for (let index = 0; index < 12; index++) {
+                    let numPicker = Math.floor(Math.random() * 10) // 0 - 9
+                    pin = pin + numPicker
 
+                }
+                mypin.innerHTML = pin
+                let pinObj = {
+                    // number: num++,
+                    provider: Provider.value,
+                    amount: Amount.value,
+                    cardPin: pin,
+                    isUsed: false
+                }
+                cardDatabase.push(pinObj)
+                localStorage.setItem('cardsData', JSON.stringify(cardDatabase))
+                display(cardDatabase)
+                console.log(cardDatabase);
             }
+            genPin.innerHTML = 'Generate Pin'
+            genPin.disabled = false
 
-            mypin.innerHTML = pin
-            let pinObj = {
-                // number: num++,
-                provider: Provider.value,
-                amount: Amount.value,
-                cardPin: pin,
-                isUsed: false
-            }
-            cardDatabase.push(pinObj)
-            display(cardDatabase)
-
-            console.log(cardDatabase);
-
-
-        }
+        }, 3000);
 
     }
 
@@ -157,6 +167,7 @@
             alert('this card has been used')
         } else {
             cardToBeRecharged.isUsed = true
+            localStorage.setItem('cardsData', JSON.stringify(cardDatabase))
             alert(`recharge successful, you just recharged ${cardToBeRecharged.provider} of ${cardToBeRecharged.amount}`)
             display(cardDatabase)
         }
@@ -175,6 +186,48 @@
     // localStorage.clear()
     // localStorage.removeItem()
 
+    // localStorage.setItem('todos', JSON.stringify({ name: 'lola' }))
+    // console.log(JSON.parse(localStorage.getItem('todos')));
 
+    // let arr = new Array()
+    // console.log(typeof arr);
+    // Array.isArray(arr)
+    // let arr2 = []
+
+    localStorage.setItem('food', JSON.stringify(['rice']))
+    localStorage.removeItem('food')
+    let myFood = JSON.parse(localStorage.getItem('food'))
+
+
+
+    console.log(myFood);
+
+    console.log(JSON.parse(localStorage.getItem('food')));
+
+
+
+
+    // localStorage.clear()
+
+    // function displayName() {
+    //     document.body.innerHTML = 'mary loves js'
+    // }
+
+    // setTimeout(() => {
+    //     displayName()
+    // }, 5000)
+
+    let count = 0
+
+    let myLogger = setInterval(() => {
+        if (count === 5) {
+            clearInterval(myLogger)
+        } else {
+            console.log('wow');
+        }
+        count++
+    }, 3000);
+
+ 
 
 </script>

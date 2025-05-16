@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Page</title>
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding-top: 10px;
+        background-color: blue;
+    }
+
+    .parent {
+        padding: 30px;
+        width: 40%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: white;
+        border-radius: 20px;
+        color: blue;
+        height: 75vh;
+        gap: 20px;
+    }
+
+    h3 {
+        font-size: 30px;
+    }
+
+    input {
+        border: 2px solid blue;
+        padding: 15px;
+        width: 80%;
+        border-radius: 20px;
+    }
+
+    #terms {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding-left: 100px;
+    }
+
+    #box {
+        width: 20px;
+    }
+
+    #box:focus-within {
+        outline: none;
+    }
+
+    #cond {
+        width: 80%;
+    }
+
+    #btn {
+        background-color: white;
+        width: 80px;
+        height: 30px;
+        background-color: blue;
+        border: none;
+        border-radius: 16px;
+        color: white;
+        font-weight: 500;
+    }
+
+    input::placeholder {
+        color: blue;
+    }
+
+    input:focus-within {
+        outline: none;
+        color: blue;
+
+    }
+
+    table,
+    td,
+    th,
+    tr,
+    thead,
+    tbody {
+        border-collapse: collapse;
+        padding: 10px;
+        border: 2px solid white;
+        color: white;
+    }
+
+    #table {
+        /* display: flex;
+            justify-content: center;
+            align-items: center; 
+            text-align: center;   */
+        margin: 50px 0 0 0;
+        width: 50%;
+
+    }
+</style>
+
+<body>
+    <div class="parent">
+        <h3>SIGNUP PAGE</h3>
+        <input id="name" placeholder="Full Name" type="text">
+        <input id="mail" placeholder="E-mail" type="email" name="email">
+        <input id="Password" placeholder="Password" type="password">
+        <input id="confpassword" placeholder="Confirm Password" type="password">
+        <div id="terms">
+            <input id="box" type="checkbox" name="" id="">
+            <span id="cond">Agree to terms and conditions</span>
+        </div>
+        <button id="btn" onclick="signup()">SignUp</button>
+    </div>
+    <table id="table">
+        <thead>
+            <th> s/n</th>
+            <th> Full Name </th>
+            <th> Email </th>
+            <th> Password </th>
+
+        </thead>
+        <tbody id="tbody">
+
+
+        </tbody>
+    </table>
+</body>
+
+</html>
+<script>
+    let info = JSON.parse(localStorage.getItem('infoo')) || []
+    let name = document.getElementById('name')
+    let mail = document.getElementById('mail')
+    let Password = document.getElementById('Password')
+    let confpassword = document.getElementById('confpassword')
+    let box = document.getElementById('box')
+
+
+    function signup() {
+        let Namex = name.value.trim()
+        let eMail = mail.value.trim()
+        let pwrd = Password.value.trim()
+        let c_pwrd = confpassword.value.trim()
+        let click = box.checked
+
+        let bool = info.find((p) => p.Email === eMail)
+
+        if (!Namex || !eMail || !pwrd || !c_pwrd) {
+            alert('All fields are mandatory')
+            return
+        }
+        if (!Namex) {
+            alert('pease enter your fullname')
+            return
+        }
+        if (!eMail) {
+            alert('please enter a valid E-mail')
+            return
+        }
+        if (bool) {
+            alert('Email Address is already used')
+            return
+        }
+        if (pwrd.length < 8) {
+            alert('Your password should atleast 8 charcter long')
+            return
+        }
+
+        if (pwrd !== c_pwrd) {
+            alert('password must be the same')
+            return
+
+        }
+        if (!click) {
+            alert('Agree to terms and condition')
+            return
+        }
+
+        let infoObj = {
+            Name: Namex,
+            Email: eMail,
+            password: pwrd
+        }
+        info.push(infoObj)
+        localStorage.setItem('infoo', JSON.stringify(info))
+        alert('login successful')
+        display()
+        window.location.href = "login.html"
+    }
+
+
+
+    function display(params = info) {
+        if (params.length === 0) {
+            tbody.innerHTML = '<tr>no data </tr>'
+            return
+        }
+        tbody.innerHTML = ''
+        params.forEach((card, i) => {
+            tbody.innerHTML += `   <tr>
+                    <td> ${i + 1} </td>
+                    <td> ${card.Name}</td>
+                    <td> ${card.Email}</td>
+                    <td> ${card.password}</td>
+                </tr>`
+        });
+    }
+
+    display()
+
+
+</script>
