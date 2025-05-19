@@ -1,14 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
-    
+    <h2>Login to your Account</h2>
+    <input type="text" id="emailInput">
+    <input type="password" id="passwordInput">
+    <button onclick="login()">login</button>
 </body>
+
 </html>
 <script>
-    console.log(JSON.parse(localStorage.getItem('infoo')));
+    let database = JSON.parse(localStorage.getItem('infoo'));
+
+    function login() {
+        if (!emailInput.value.trim() || !passwordInput.value.trim()) {
+            alert("All fields are mandatory")
+        } else {
+            let infoo = database.find((i) => {
+                return i.Email === emailInput.value.trim()
+            })
+            if (infoo) {
+                let isPass = infoo.password === passwordInput.value.trim()
+                if (isPass) {
+                    alert("Logged in successfully")
+                    localStorage.setItem("userInput",infoo.Name)
+                    window.location.href = "Dashboard.html"
+                } else {
+                    alert("Invalid password!")
+                }
+            } else {
+                alert("Account does not exist")
+
+            }
+        }
+
+    }
 </script>
