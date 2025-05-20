@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fffde7;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      background: #ef6c00;
+      color: white;
+      padding: 15px 20px;
+    }
+
+    .post-form {
+      padding: 20px;
+    }
+
+    input[type="text"] {
+      width: 45%;
+      padding: 10px;
+      margin: 8px 5px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 8px 5px;
+      background: #0288d1;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .post {
+      margin: 15px 20px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background: white;
+    }
+
+    #image {
+      display: none;
+    }
+
+    #image1 {
+      border-radius: 50%;
+    }
+
+    #forProfile {
+      background-color: #0288d1;
+      position: fixed;
+      width: 400px;
+      height: 150px;
+      bottom: 20px;
+      right: 0;
+      border: 2px solid orange;
+      z-index: 2;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <div id="welcome"></div>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+  <div id="forProfile">
+    <img src="" width="100" height="100" id="image1" alt="">
+
+    <input type="file" id="file" onchange="pickPicture('image1' , 'file')">
+
+  </div>
+
+  <div class="post-form">
+    <input type="text" id="title" placeholder="Enter title" />
+    <input type="text" id="desc" placeholder="Enter description" />
+    <input type="file" id="filePicker" onchange="pickPicture('image' , 'filePicker')" accept=".png,.jpg,.pdf" />
+    <img src="" alt="" id="image" width="100" height="100" />
+    <button onclick="post()">Post</button>
+  </div>
+
+  <div id="posts"></div>
+
+  <script>
+    let database = JSON.parse(localStorage.getItem("database"))
+    let currentUserIndex = localStorage.getItem("currentUserIndex")
+    let currentUser = database[currentUserIndex] // {name : , email: , blogPosts: , password: }
+    let posts = currentUser.blogPosts
+    let profilePic = currentUser.profilePicture
+
+
+    function checkUser() {
+      if (!currentUser) {
+        alert("unauthorized user")
+        window.location.href = "login.html"
+      } else {
+        document.getElementById("welcome").innerHTML = "Welcome " + currentUser.fullname.toLowerCase()
+        displayProfilePicture()
+      }
+    }
+
+    checkUser()
+
+
+
+
+
+    function post() {
+      let title = document.getElementById("title").value.trim()
+      let desc = document.getElementById("desc").value.trim()
+
+      if (!title || !desc) {
+        alert("All fields are mandatory")
+        return
+      }
+
+      let existingPost = posts.find((p) => {
+        return p.title === title && p.desc === desc && p.image === image.src
+      })
+
+      if (existingPost) {
+        alert("This post already exists")
+        return
+      }
+
+      let newPost = {
+        title: title,
+        desc: desc,
+        image: image.src,
+        liked: false
+      }
+      posts.push(newPost)
+      localStorage.setItem("database", JSON.stringify(database))
+      displayPosts()
+    }
+
+    function pickPicture(image, id) {
+      let inputFile = document.getElementById(id).files[0]
+      let reader = new FileReader()
+      if (inputFile) {
+        reader.readAsDataURL(inputFile)
+
+      }
+      reader.addEventListener("load", (ev) => {
+        let displayImage = document.getElementById('image')
+        let result = ev.target.result
+        image === 'image' ? (displayImage.src = result,
+          displayImage.style.display = 'block') :
+          (image1.src = result,
+            currentUser.profilePicture = image1.src,
+            console.log(profilePic),
+            localStorage.setItem("database", JSON.stringify(database))
+          )
+
+
+        console.log(result);
+
+
+
+      })
+    }
+
+
+    function displayPosts() {
+      let postText = ""
+
+      for (let i = 0; i < posts.length; i++) {
+        postText += `
+          <div class='post'>
+            <strong>Title:</strong> ${posts[i].title}<br>
+            <strong>Description:</strong> ${posts[i].desc}
+            <img src="${posts[i].image}" width="100" height="100"/>
+            <button onclick="like(${i})"> ${posts[i].liked ? 'liked' : 'not-liked'} </button>
+          </div>
+        `
+      }
+
+      document.getElementById("posts").innerHTML = postText
+    }
+
+    function like(index) {
+      if (currentUser.blogPosts[index].liked === true) {
+        currentUser.blogPosts[index].liked = false
+      } else {
+        currentUser.blogPosts[index].liked = true
+      }
+
+      localStorage.setItem("database", JSON.stringify(database))
+      displayPosts()
+
+    }
+
+
+    function logout() {
+      localStorage.removeItem("currentUserIndex")
+      alert("logout successful")
+      window.location.href = "login.html"
+    }
+
+    displayPosts()
+
+
+    function displayProfilePicture() {
+
+      profilePic === null ? image1.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5jifLXKb2qo_5aXh54USNlvxI34oPpG3zTw&s' : image1.src = profilePic
+      console.log(image1.src);
+      console.log('i ran');
+    }
+
+
+  </script>
+
+</body>
+
+</html>

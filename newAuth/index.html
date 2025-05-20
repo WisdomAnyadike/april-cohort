@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Signup Form</title>
+  <style>
+    body {
+      background: #e0f7fa;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 50px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .checkbox {
+      margin: 10px 0;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #00796b;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #004d40;
+    }
+
+    #tableCon {
+      width: 90%;
+      margin: 30px auto;
+      /* display: none; */
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table,
+    th,
+    td {
+      border: 1px solid #00796b;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #00796b;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h2>Signup Form</h2>
+    <form id="signupForm">
+      <input type="text" id="fullname" placeholder="Full Name">
+      <input type="email" id="email" placeholder="Email">
+      <input type="password" id="password" placeholder="Password">
+      <input type="password" id="confirm" placeholder="Confirm Password">
+      <div class="checkbox">
+        <input type="checkbox" id="agree"> I agree to the terms and conditions
+      </div>
+      <button type="button" onclick="signup()">Sign Up</button>
+    </form>
+  </div>
+
+  <div id="tableCon">
+    <table id="userTable">
+      <thead>
+        <tr>
+          <th>S/N</th>
+          <th>Full Name</th>
+          <th>Email</th>
+          <th>Password</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    let database = JSON.parse(localStorage.getItem("database")) || []
+
+    function signup() {
+      let fullname = document.getElementById("fullname").value
+      let email = document.getElementById("email").value
+      let password = document.getElementById("password").value
+      let confirm = document.getElementById("confirm").value
+      let agree = document.getElementById("agree").checked
+
+
+      if (fullname === "" || email === "" || password === "" || confirm === "") {
+        alert("All fields must be filled!")
+        return
+      }
+
+
+      let currentUser = database.find((i) => {
+        return i.email === email
+      })
+
+      if (currentUser) {
+        alert("This email has already been used")
+        return
+      }
+
+      if (password.length < 9) {
+        alert("Password must be more than 8 characters")
+        return
+      }
+
+      if (password !== confirm) {
+        alert("Passwords do not match")
+        return
+      }
+
+      if (!agree) {
+        alert("You must agree to the terms and conditions")
+        return
+      }
+
+
+      let user = {
+        fullname: fullname,
+        email: email,
+        password: password,
+        blogPosts: [],
+        profilePicture: null
+      }
+
+      database.push(user)
+      localStorage.setItem("database", JSON.stringify(database))
+      updateTable()
+      document.getElementById("signupForm").reset()
+      window.location.href = "login.html"
+    }
+
+    function updateTable() {
+      let tableBody = document.getElementById("tableBody")
+      let tableCon = document.getElementById("tableCon")
+      // tableCon.style.display = "block"
+
+      tableBody.innerHTML = ""
+
+      for (let i = 0; i < database.length; i++) {
+        tableBody.innerHTML = tableBody.innerHTML + `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${database[i].fullname}</td>
+        <td>${database[i].email}</td>
+        <td>${database[i].password}</td>
+      </tr>
+    `
+      }
+    }
+  </script>
+
+</body>
+
+</html>

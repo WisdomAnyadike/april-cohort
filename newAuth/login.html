@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background: #f0f4c3;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 80px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #33691e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1b5e20;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Login</h2>
+        <input type="email" id="email" placeholder="Email" />
+        <input type="password" id="password" placeholder="Password" />
+        <button onclick="login()">Login</button>
+    </div>
+
+    <script>
+        let database = JSON.parse(localStorage.getItem("database"))
+        function login() {
+            let email = document.getElementById("email").value
+            let password = document.getElementById("password").value
+
+
+            if (!email || !password) {
+                alert("Please fill in all fields")
+                return
+            }
+
+
+            let user = database.find((i) => {
+                return i.email === email && i.password === password
+            })
+
+
+            if (!user) {
+                alert("Invalid email or password")
+                return
+            } else {
+                alert("Login successful")
+                let userIndex = database.findIndex((obj) => obj.email === user.email)
+                localStorage.setItem("currentUserIndex", userIndex)
+                window.location.href = "dashboard.html"
+            }
+        }
+
+
+    </script>
+</body>
+
+</html>
