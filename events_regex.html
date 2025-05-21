@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .book {
+        border: 1px solid green;
+        border-radius: 10px;
+        margin: 10px;
+        padding: 10px;
+    }
+</style>
+
+<body>
+
+    <input id="bookInput" type="text" oninput="searchBooks(event)">
+
+    <div id="previewDiv" ondblclick="run(event)"></div>
+
+    <!-- <div style="width: 200px; border: 1px solid black; height: 200px;">
+
+    </div> -->
+
+    <!-- <select id="selectButton" onchange="chooseDivColor()">
+        <option value="white"> choose option </option>
+        <option value="yellow"> option1</option>
+        <option value="blue"> option2 </option>
+        <option value="green"> option3 </option>
+        <option value="red"> option4 </option>
+    </select> -->
+
+    <!-- <input type="color" id="selectButton" onchange="chooseDivColor()">
+
+
+    <div id="myDiv" style="width: 200px; border: 1px solid black; height: 200px" onmouseover="changeColor(true)"
+        onmouseleave="changeColor(false)" ondblclick="run()">
+
+        <input id="input1" type="text"  onfocus="changeOutline()">
+
+    </div> -->
+
+</body>
+
+</html>
+<script>
+    // let input1 = document.getElementById('input1')
+    //     function chooseDivColor() {
+    //         document.querySelector('div').style.backgroundColor = selectButton.value
+    //     }
+
+    //     function changeColor(params) {
+    //         myDiv.style.backgroundColor = params ? 'red' : 'white'
+    //     }
+
+    //     function run() {
+    //         myDiv.style.display = 'none'
+    //     }
+
+
+    //     function helpPress(params) {
+    //         console.log( input1.value.trim());
+    //     }
+
+    //     function changeOutline(params) {
+    //         input1.style.outlineColor = 'yellow'
+
+    //     }
+
+    // input1.addEventListener('keyup' , helpPress)
+    let previewDiv = document.getElementById("previewDiv")
+    let books = [
+        {
+            name: 'the punisher',
+            author: 'ridwan',
+            pages: 200
+        },
+
+        {
+            name: 'the Gods must be crazy',
+            author: 'mary',
+            pages: 456
+        },
+
+        {
+            name: 'molete',
+            author: 'wisdom',
+            pages: 90
+        },
+
+    ]
+
+    function searchBooks(ev) {
+        console.log(ev);
+
+        ev.target.nextElementSibling.style.backgroundColor = 'red'
+        let filteredBooks = books.filter((book) => {
+            let input = bookInput.value.trim().toLowerCase() // mary
+            return book.name.includes(input) || book.author.includes(input) || book.pages.toString().includes(input)
+        })
+
+        if (filteredBooks.length === 0) {
+            previewDiv.innerHTML = "Book does not exist!"
+            // alert("Book does not exist!")
+        } else {
+            displayBooks(filteredBooks)
+        }
+
+        console.log(filteredBooks);
+    }
+
+
+
+    function displayBooks(p) {
+        previewDiv.innerHTML = ""
+        for (let i = 0; i < p.length; i++) {
+            previewDiv.innerHTML += `<div class="book">
+                <p> name :  ${p[i].name.toUpperCase()}</p>
+                <p> author :  ${p[i].author}</p>
+                <p> pages :  <span>  ${p[i].pages} </span> </p>
+            </div>`
+
+        }
+    }
+    displayBooks(books)
+
+    let values = [1, 2, 'hello', 'wow']
+    let filteredValues = values.filter((val) => typeof val === "string") // return array [ 'hello' , 'wow']
+    console.log(filteredValues);
+
+    console.log(false || false || false);
+
+
+    function run(e) {
+        console.log(e);
+        // lastElementChild.lastElementChild.style.color = 'blue'
+        e.target.lastChild.onclick = () => {
+            e.target.lastChild.style.backgroundColor = 'blue'
+        }
+
+    }
+</script>
