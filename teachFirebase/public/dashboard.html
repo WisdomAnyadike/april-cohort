@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-auth-compat.js"></script>
+</head>
+
+<body>
+
+    <div style="display: flex; justify-content: space-between;">
+        <h1> Welcome <b id="username"> loading... </b> </h1>
+
+        <button onclick="signOut()"> logout </button>
+    </div>
+
+</body>
+
+</html>
+<script>
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAXzZ7Eg4068JONW422p4aqOP3LTrAK3RQ",
+        authDomain: "april-43ed6.firebaseapp.com",
+        projectId: "april-43ed6",
+        storageBucket: "april-43ed6.firebasestorage.app",
+        messagingSenderId: "649232150590",
+        appId: "1:649232150590:web:c616d78c17ea49f9efa16f"
+    };
+
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+
+    function checkUser() {
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                var uid = user.uid;
+                username.innerHTML = user.displayName
+            } else {
+                window.location.href = 'login.html'
+            }
+        });
+    }
+    
+
+    checkUser()
+
+    function signOut() {
+        firebase.auth().signOut().then(() => {
+            alert('sign out success')
+            window.location.href = 'login.html'
+        }).catch((error) => {
+            alert(error.message)
+        });
+    }
+
+</script>
