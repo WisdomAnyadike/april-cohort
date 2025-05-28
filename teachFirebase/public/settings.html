@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.8.0/firebase-auth-compat.js"></script>
+</head>
+<style>
+    #loader {
+        width: 200px;
+        height: 100px;
+        background-color: orange;
+        color: white;
+        position: fixed;
+        top: 0;
+        right: 0;
+        border-radius: 30px;
+        display: none;
+    }
+</style>
+
+<body>
+    <img id="profileImage" alt=""
+        src="https://media.istockphoto.com/id/1033704156/vector/loading-circle-icon-progress-loading-vector-icon-update-icon.jpg?s=612x612&w=0&k=20&c=Ap_ELUDTrZj1jRFqbqBfKipF6Y_4C8QRgwWf0NFLDw0="
+        width="200" height="200" style="border-radius: 50%;">
+    <input type="file" onchange="pickPicture(event)" id="picturePicker">
+    <h1 id="loader"> </h1>
+
+</body>
+
+</html>
+<script>
+
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAXzZ7Eg4068JONW422p4aqOP3LTrAK3RQ",
+        authDomain: "april-43ed6.firebaseapp.com",
+        databaseURL: "https://april-43ed6-default-rtdb.firebaseio.com",
+        projectId: "april-43ed6",
+        storageBucket: "april-43ed6.firebasestorage.app",
+        messagingSenderId: "649232150590",
+        appId: "1:649232150590:web:c616d78c17ea49f9efa16f"
+    };
+
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+
+    function checkUser() {
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                var uid = user.uid;
+                profileImage.src = user.photoURL ? user.photoURL : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTML0gExaohZHdZW3609F12nUmVc14WXYNx_w&s'
+            } else {
+                window.location.href = 'login.html'
+            }
+        });
+    }
+
+
+    checkUser()
+
+    // function pickPicture(params) {
+    //     let file = document.getElementById('picturePicker').files[0]
+
+    //     let reader = new FileReader
+    //     if (file) {
+    //         reader.readAsDataURL(file)
+    //     }
+
+    //     reader.addEventListener('load', (e) => {
+    //         let result = e.target.result
+    //         const user = firebase.auth().currentUser;
+
+    //         user.updateProfile({
+    //             photoURL: result
+    //         }).then(() => {
+    //             profileImage.src = result
+    //         }).catch((error) => {
+    //             alert(error.message)
+    //         });
+    //         console.log(result);
+    //     })
+
+
+    // }
+
+    function pickPicture(ev) {
+        let file = ev.target.files[0]
+        if (!file) {
+            alert('please attach a file')
+            return
+        }
+        showLoader('loading...')
+        let formData = new FormData()
+        formData.append('file', file)
+        formData.append('upload_preset', "newclass")
+
+        fetch('https://api.cloudinary.com/v1_1/anyacodes/image/upload', {
+            method: 'POST',
+            body: formData
+        }).then((res) => res.json()).then((data) => {
+
+            const user = auth.currentUser;
+            user.updateProfile({
+                photoURL: data.secure_url
+            }).then(() => {
+                showLoader('success')
+                profileImage.src = data.secure_url
+            }).catch((error) => {
+                alert(error.message)
+                console.log(error.code);
+                showLoader('error')
+            });
+
+
+
+        }).catch((err) => alert(err))
+
+
+    }
+
+
+    function showLoader(params) {
+        loader.innerHTML = params
+        loader.style.display = 'block'
+        setTimeout(() => {
+            loader.style.display = 'none'
+            loader.innerHTML = ''
+        }, 2000)
+    }
+
+
+</script>
